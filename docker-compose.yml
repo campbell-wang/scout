@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - shared_network
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+  db:
+    image: postgres:16
+    networks:
+      - shared_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+networks:
+  shared_network:
+    external: true
+
+volumes:
+  postgres_data:
